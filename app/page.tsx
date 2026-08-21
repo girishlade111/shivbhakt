@@ -39,6 +39,8 @@ export default function HomePage() {
     <main>
       <Hero />
 
+      <EarlyLife />
+
       {/* Scroll-triggered timeline strip (AOS) */}
       <section
         aria-labelledby="timeline-heading"
