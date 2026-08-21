@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "framer-motion";
+import RoyalFrame from "@/components/RoyalFrame";
 
 interface EarlyLifeEntry {
   readonly heading: string;
@@ -28,9 +32,11 @@ const EARLY_LIFE_ENTRIES: readonly EarlyLifeEntry[] = [
 
 function EntryTextBlock({ entry }: { readonly entry: EarlyLifeEntry }) {
   return (
-    <div
-      data-aos={entry.reversed ? "fade-left" : "fade-right"}
-      data-aos-delay="100"
+    <motion.div
+      initial={{ opacity: 0, x: entry.reversed ? 50 : -50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
       className={`max-w-xl ${entry.reversed ? "lg:order-2 lg:justify-self-end" : ""}`}
     >
       <p className="mb-3 text-xs font-semibold uppercase tracking-[0.35em] text-kesari">
@@ -44,37 +50,35 @@ function EntryTextBlock({ entry }: { readonly entry: EarlyLifeEntry }) {
         className="mt-5 block h-[3px] w-16 rounded-full bg-gradient-to-r from-gold via-brightgold to-transparent"
       />
       <p className="mt-6 text-base leading-relaxed text-gray-300">{entry.text}</p>
-    </div>
+    </motion.div>
   );
 }
 
 function EntryImageBlock({ entry }: { readonly entry: EarlyLifeEntry }) {
   return (
-    <div
-      data-aos={entry.reversed ? "fade-right" : "fade-left"}
-      data-aos-delay="200"
-      className={`group relative w-full max-w-xl ${entry.reversed ? "lg:order-1 lg:justify-self-start" : ""}`}
+    <motion.div
+      initial={{ opacity: 0, x: entry.reversed ? -50 : 50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 }}
+      className={`group w-full ${entry.reversed ? "lg:order-1 lg:justify-self-start" : ""}`}
     >
-      {/* Offset gold frame */}
-      <div
-        aria-hidden
-        className="absolute -inset-3 rounded-2xl border border-gold/25 transition-all duration-300 group-hover:border-gold/60 group-hover:shadow-[0_0_45px_rgba(212,175,55,0.25)]"
-      />
-      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl ring-1 ring-gold/30 transition-shadow duration-300 group-hover:shadow-[0_0_50px_rgba(255,103,31,0.3)]">
-        <Image
-          src={entry.image}
-          alt={entry.alt}
-          fill
-          sizes="(max-width: 1024px) 100vw, 40vw"
-          className="object-cover object-center transition-all duration-300 ease-out group-hover:scale-105"
-        />
-        {/* Bottom fade for depth */}
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
-        />
-      </div>
-    </div>
+      <RoyalFrame className="transition-shadow duration-300 group-hover:shadow-[0_0_35px_rgba(212,175,55,0.25)]">
+        <div className="relative w-full aspect-[4/3] overflow-hidden rounded-xl">
+          <Image
+            src={entry.image}
+            alt={entry.alt}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover rounded-xl transition-transform duration-500 ease-out group-hover:scale-105"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
+          />
+        </div>
+      </RoyalFrame>
+    </motion.div>
   );
 }
 
@@ -93,7 +97,13 @@ export default function EarlyLife() {
 
       <div className="relative mx-auto max-w-7xl px-6">
         {/* Section heading */}
-        <header data-aos="fade-up" className="mx-auto mb-20 max-w-2xl text-center">
+        <motion.header
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mx-auto mb-20 max-w-2xl text-center"
+        >
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-kesari">
             Chapter 01
           </p>
@@ -107,7 +117,7 @@ export default function EarlyLife() {
             aria-hidden
             className="mx-auto mt-5 block h-[3px] w-28 rounded-full bg-gradient-to-r from-transparent via-brightgold to-transparent"
           />
-        </header>
+        </motion.header>
 
         {/* Alternating rows */}
         <div className="space-y-20 sm:space-y-24">
