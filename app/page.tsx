@@ -3,6 +3,7 @@ import EarlyLife from "@/components/EarlyLife";
 import BijapurConflict from "@/components/BijapurConflict";
 import MughalConflict from "@/components/MughalConflict";
 import CoronationAdmin from "@/components/CoronationAdmin";
+import LegacyFooter from "@/components/LegacyFooter";
 
 interface TimelineFact {
   readonly period: string;
