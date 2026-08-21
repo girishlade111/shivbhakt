@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "framer-motion";
+import RoyalFrame from "@/components/RoyalFrame";
 
 interface BentoEvent {
   readonly title: string;
@@ -7,8 +11,6 @@ interface BentoEvent {
   readonly alt: string;
   /** Wide cells span 4 of 6 columns; square cells span 2. */
   readonly wide: boolean;
-  /** When true the image renders as a faded full-cell backdrop behind the text. */
-  readonly backgroundImage: boolean;
 }
 
 const BENTO_EVENTS: readonly BentoEvent[] = [
@@ -18,7 +20,6 @@ const BENTO_EVENTS: readonly BentoEvent[] = [
     image: "/images/shaista-khan-attack.jpg",
     alt: "Shivaji's night attack on Shaista Khan at Lal Mahal, Pune",
     wide: true,
-    backgroundImage: true,
   },
   {
     title: "Sack of Surat (1664)",
@@ -26,7 +27,6 @@ const BENTO_EVENTS: readonly BentoEvent[] = [
     image: "/images/surat-sack.jpg",
     alt: "The sack of Surat, the wealthy Mughal trading center",
     wide: false,
-    backgroundImage: false,
   },
   {
     title: "Treaty of Purandar (1665)",
@@ -34,7 +34,6 @@ const BENTO_EVENTS: readonly BentoEvent[] = [
     image: "/images/purandar-treaty.jpg",
     alt: "The signing of the Treaty of Purandar with Jai Singh I",
     wide: false,
-    backgroundImage: false,
   },
   {
     title: "The Great Escape from Agra (1666)",
@@ -42,70 +41,51 @@ const BENTO_EVENTS: readonly BentoEvent[] = [
     image: "/images/agra-escape.jpg",
     alt: "Shivaji's legendary escape from Agra in baskets of sweets",
     wide: true,
-    backgroundImage: true,
   },
 ];
 
-function BentoCard({ event, index }: { readonly event: BentoEvent; readonly index: number }) {
-  const shellClasses = `group relative overflow-hidden rounded-3xl border border-white/10 bg-black/40 backdrop-blur-md transition-all duration-300 ease-out hover:scale-[1.02] hover:border-gold/40 hover:shadow-[0_0_20px_rgba(255,103,31,0.3)] ${
-    event.wide ? "lg:col-span-4 min-h-[340px]" : "lg:col-span-2"
-  }`;
-
-  if (event.backgroundImage) {
-    return (
-      <article
-        data-aos="zoom-in"
-        data-aos-delay={(index * 120).toString()}
-        className={`flex flex-col justify-end ${shellClasses}`}
-      >
-        {/* Faded artwork backdrop */}
-        <Image
-          src={event.image}
-          alt={event.alt}
-          fill
-          sizes="(max-width: 1024px) 100vw, 66vw"
-          className="object-cover object-center opacity-30 transition-transform duration-500 ease-out group-hover:scale-110"
-        />
-        {/* Readability gradient */}
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/20"
-        />
-        <div className="relative z-10 space-y-3 p-8 sm:p-10">
-          <h3 className="font-display text-xl font-bold text-kesari drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] sm:text-2xl">
-            {event.title}
-          </h3>
-          <p className="text-sm leading-relaxed text-gray-300">{event.text}</p>
-        </div>
-      </article>
-    );
-  }
-
+function BentoCard({
+  event,
+  index,
+}: {
+  readonly event: BentoEvent;
+  readonly index: number;
+}) {
   return (
-    <article
-      data-aos="zoom-in"
-      data-aos-delay={(index * 120).toString()}
-      className={`flex flex-col ${shellClasses}`}
+    <motion.article
+      initial={{ opacity: 0, scale: 0.92 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.12 }}
+      className={`group flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-black/40 backdrop-blur-md transition-[border-color,box-shadow] duration-300 ease-out hover:border-gold/40 hover:shadow-[0_0_20px_rgba(255,103,31,0.3)] ${
+        event.wide ? "lg:col-span-4" : "lg:col-span-2"
+      }`}
     >
       {/* Framed artwork */}
-      <div className="relative m-3 h-44 overflow-hidden rounded-2xl ring-1 ring-gold/25">
-        <Image
-          src={event.image}
-          alt={event.alt}
-          fill
-          sizes="(max-width: 1024px) 100vw, 33vw"
-          className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-110"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
-        />
-      </div>
-      <div className="space-y-3 px-6 pb-7 pt-3">
-        <h3 className="font-display text-xl font-bold text-kesari">{event.title}</h3>
+      <RoyalFrame className="m-4 mb-0">
+        <div className="relative w-full aspect-video overflow-hidden rounded-xl">
+          <Image
+            src={event.image}
+            alt={event.alt}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover rounded-xl transition-transform duration-500 ease-out group-hover:scale-110"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"
+          />
+        </div>
+      </RoyalFrame>
+
+      {/* Body */}
+      <div className="space-y-3 px-7 pb-7 pt-5">
+        <h3 className="font-display text-xl font-bold text-kesari sm:text-2xl">
+          {event.title}
+        </h3>
         <p className="text-sm leading-relaxed text-gray-300">{event.text}</p>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
@@ -124,7 +104,13 @@ export default function MughalConflict() {
 
       <div className="relative mx-auto max-w-7xl px-6">
         {/* Section heading */}
-        <header data-aos="fade-up" className="mx-auto mb-20 max-w-2xl text-center">
+        <motion.header
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mx-auto mb-20 max-w-2xl text-center"
+        >
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-gold">
             Chapter 03
           </p>
@@ -138,10 +124,10 @@ export default function MughalConflict() {
             aria-hidden
             className="mx-auto mt-5 block h-[3px] w-28 rounded-full bg-gradient-to-r from-transparent via-brightgold to-transparent"
           />
-        </header>
+        </motion.header>
 
         {/* Bento grid: single column on mobile, 6-column mosaic on desktop */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-6 lg:auto-rows-fr">
+        <div className="grid grid-cols-1 gap-6 lg:auto-rows-fr lg:grid-cols-6">
           {BENTO_EVENTS.map((event, index) => (
             <BentoCard key={event.title} event={event} index={index} />
           ))}
