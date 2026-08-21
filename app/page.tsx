@@ -88,6 +88,8 @@ export default function HomePage() {
           </ol>
         </div>
       </section>
+
+      <LegacyFooter />
     </main>
   );
 }
