@@ -42,6 +42,8 @@ export default function HomePage() {
 
       <EarlyLife />
 
+      <BijapurConflict />
+
       {/* Scroll-triggered timeline strip (AOS) */}
       <section
         aria-labelledby="timeline-heading"
