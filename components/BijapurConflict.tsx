@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import type { StaticImageData } from "next/image";
 import { useRef } from "react";
 import {
   motion,
@@ -9,12 +10,15 @@ import {
   useTransform,
 } from "framer-motion";
 import RoyalFrame from "@/components/RoyalFrame";
+import tornaRajgadImg from "@/public/images/torna-rajgad.jpg";
+import pratapgadDuelImg from "@/public/images/pratapgad-duel.jpg";
+import pavanKhindImg from "@/public/images/pavan-khind.jpg";
 
 interface TimelineEvent {
   readonly period: string;
   readonly title: string;
   readonly text: string;
-  readonly image: string;
+  readonly image: StaticImageData;
   readonly alt: string;
 }
 
@@ -23,21 +27,21 @@ const TIMELINE_EVENTS: readonly TimelineEvent[] = [
     period: "1647 – 1656",
     title: "Early Conquests & Javali",
     text: "In 1647, a 16-year-old Shivaji captured the Torna Fort and used the treasure to build Rajgad. He later seized the strategic Javali valley in 1656 from Chandrarao More, extending his influence into southwest Maharashtra.",
-    image: "/images/torna-rajgad.jpg",
+    image: tornaRajgadImg,
     alt: "Torna and Rajgad forts, the first conquests of Shivaji",
   },
   {
     period: "10 November 1659",
     title: "The Duel at Pratapgad",
     text: "Bijapur sent the veteran general Afzal Khan to arrest Shivaji. Meeting at the foothills of Pratapgad, Khan attempted a betrayal, but Shivaji, wearing hidden armor and wielding a 'bagh nakh' (tiger claw), struck him down. The ensuing battle was a decisive victory for the Marathas.",
-    image: "/images/pratapgad-duel.jpg",
+    image: pratapgadDuelImg,
     alt: "The duel between Shivaji Maharaj and Afzal Khan at Pratapgad",
   },
   {
     period: "July – September 1660",
     title: "Siege of Panhala & Pavan Khind",
     text: "Besieged at Panhala fort by Siddi Jauhar, Shivaji executed a daring night escape. His commander, Baji Prabhu Deshpande, along with 300 soldiers, fought to the death at Ghod Khind to hold back the enemy. The pass was renamed 'Paavan Khind' (Sacred Pass) in their honor.",
-    image: "/images/pavan-khind.jpg",
+    image: pavanKhindImg,
     alt: "Pavan Khind, the sacred pass defended by Baji Prabhu Deshpande",
   },
 ];
@@ -51,34 +55,27 @@ function TimelineCard({
 }) {
   return (
     <motion.article
-      initial={{ opacity: 0, x: onRight ? 60 : -60 }}
+      initial={{ opacity: 0, x: onRight ? 50 : -50 }}
       whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.65, ease: "easeOut" }}
-      className="group relative overflow-hidden rounded-2xl border border-gold/20 bg-black/40 backdrop-blur-md transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:border-gold/60 hover:shadow-[0_0_45px_rgba(212,175,55,0.3)]"
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="group relative overflow-hidden rounded-2xl border border-gold/20 bg-black/40 backdrop-blur-md transition-[border-color,box-shadow] duration-300 ease-out hover:border-gold/60 hover:shadow-[0_0_45px_rgba(212,175,55,0.3)]"
     >
-      {/* Card artwork */}
+      {/* Card artwork — full image, no cropping */}
       <RoyalFrame className="m-4 mb-0">
-        <div className="relative w-full aspect-video overflow-hidden rounded-xl">
-          <Image
-            src={event.image}
-            alt={event.alt}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover rounded-xl transition-transform duration-500 ease-out group-hover:scale-110"
-          />
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"
-          />
-          <p className="absolute bottom-3 left-4 font-display text-xs font-semibold uppercase tracking-[0.3em] text-kesari drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-            {event.period}
-          </p>
-        </div>
+        <Image
+          src={event.image}
+          alt={event.alt}
+          placeholder="blur"
+          className="w-full h-auto rounded-lg object-contain"
+        />
       </RoyalFrame>
 
       {/* Card body */}
-      <div className="space-y-3 p-6 pt-5 sm:p-7 sm:pt-5">
+      <div className="space-y-2 p-6 pt-5 sm:p-7 sm:pt-5">
+        <p className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-brightgold">
+          {event.period}
+        </p>
         <h3 className="font-display text-xl font-bold text-kesari sm:text-2xl">
           {event.title}
         </h3>
@@ -116,8 +113,8 @@ export default function BijapurConflict() {
         <motion.header
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
           className="mx-auto mb-20 max-w-2xl text-center"
         >
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-gold">
@@ -158,7 +155,7 @@ export default function BijapurConflict() {
                   {/* Glowing node on the line */}
                   <span
                     aria-hidden
-                    className="absolute left-4 top-10 z-10 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-brightgold bg-night shadow-[0_0_18px_rgba(255,215,0,0.8)] transition-transform duration-300 lg:left-1/2"
+                    className="absolute left-4 top-10 z-10 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-brightgold bg-night shadow-[0_0_18px_rgba(255,215,0,0.8)] lg:left-1/2"
                   />
 
                   <div
