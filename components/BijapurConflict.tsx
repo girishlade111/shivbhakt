@@ -1,9 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import RoyalFrame from "@/components/RoyalFrame";
 
 interface TimelineEvent {
   readonly period: string;
@@ -45,76 +50,58 @@ function TimelineCard({
   readonly onRight: boolean;
 }) {
   return (
-    <div
-      data-aos={onRight ? "fade-left" : "fade-right"}
-      data-aos-duration="800"
-      className="group relative overflow-hidden rounded-2xl border border-gold/20 bg-black/40 backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:border-gold/60 hover:shadow-[0_0_45px_rgba(212,175,55,0.3)]"
+    <motion.article
+      initial={{ opacity: 0, x: onRight ? 60 : -60 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.65, ease: "easeOut" }}
+      className="group relative overflow-hidden rounded-2xl border border-gold/20 bg-black/40 backdrop-blur-md transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:border-gold/60 hover:shadow-[0_0_45px_rgba(212,175,55,0.3)]"
     >
       {/* Card artwork */}
-      <div className="relative h-52 overflow-hidden sm:h-60">
-        <Image
-          src={event.image}
-          alt={event.alt}
-          fill
-          sizes="(max-width: 1024px) 100vw, 42vw"
-          className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-110"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"
-        />
-        <p className="absolute bottom-4 left-5 font-display text-xs font-semibold uppercase tracking-[0.3em] text-kesari drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-          {event.period}
-        </p>
-      </div>
+      <RoyalFrame className="m-4 mb-0">
+        <div className="relative w-full aspect-video overflow-hidden rounded-xl">
+          <Image
+            src={event.image}
+            alt={event.alt}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover rounded-xl transition-transform duration-500 ease-out group-hover:scale-110"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"
+          />
+          <p className="absolute bottom-3 left-4 font-display text-xs font-semibold uppercase tracking-[0.3em] text-kesari drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+            {event.period}
+          </p>
+        </div>
+      </RoyalFrame>
 
       {/* Card body */}
-      <div className="space-y-3 p-6 sm:p-7">
+      <div className="space-y-3 p-6 pt-5 sm:p-7 sm:pt-5">
         <h3 className="font-display text-xl font-bold text-kesari sm:text-2xl">
           {event.title}
         </h3>
         <p className="text-sm leading-relaxed text-gray-300">{event.text}</p>
       </div>
-    </div>
+    </motion.article>
   );
 }
 
 export default function BijapurConflict() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const ctx = gsap.context(() => {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        gsap.set("[data-line-fill]", { scaleY: 1 });
-        return;
-      }
-
-      /* Gold line draws itself downward as the user scrolls */
-      gsap.fromTo(
-        "[data-line-fill]",
-        { scaleY: 0 },
-        {
-          scaleY: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: "[data-timeline]",
-            start: "top 70%",
-            end: "bottom 65%",
-            scrub: 0.6,
-          },
-        }
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  /* Scroll-linked line drawing (replaces GSAP ScrollTrigger scrub) */
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start 75%", "end 55%"],
+  });
+  const lineScaleY = useTransform(scrollYProgress, [0, 1], [reduceMotion ? 1 : 0, 1]);
 
   return (
     <section
       id="bijapur-conflict"
-      ref={sectionRef}
       aria-labelledby="bijapur-heading"
       className="relative overflow-hidden bg-night py-24 sm:py-28"
     >
@@ -126,7 +113,13 @@ export default function BijapurConflict() {
 
       <div className="relative mx-auto max-w-7xl px-6">
         {/* Section heading */}
-        <header data-aos="fade-up" className="mx-auto mb-20 max-w-2xl text-center">
+        <motion.header
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mx-auto mb-20 max-w-2xl text-center"
+        >
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-gold">
             Chapter 02
           </p>
@@ -140,19 +133,19 @@ export default function BijapurConflict() {
             aria-hidden
             className="mx-auto mt-5 block h-[3px] w-28 rounded-full bg-gradient-to-r from-transparent via-brightgold to-transparent"
           />
-        </header>
+        </motion.header>
 
         {/* Vertical timeline */}
-        <div data-timeline className="relative">
+        <div ref={timelineRef} data-timeline className="relative">
           {/* Line track */}
           <div
             aria-hidden
             className="absolute bottom-0 left-4 top-0 w-px -translate-x-1/2 bg-white/10 lg:left-1/2"
           />
-          {/* Glowing gold fill (GSAP-scrubbed) */}
-          <div
+          {/* Glowing gold fill (scroll-scrubbed) */}
+          <motion.div
             aria-hidden
-            data-line-fill
+            style={{ scaleY: lineScaleY }}
             className="absolute bottom-0 left-4 top-0 w-[2px] origin-top -translate-x-1/2 bg-gradient-to-b from-brightgold via-gold to-kesari shadow-[0_0_16px_rgba(212,175,55,0.7)] will-change-transform lg:left-1/2"
           />
 
