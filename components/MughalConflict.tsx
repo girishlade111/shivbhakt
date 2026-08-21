@@ -1,13 +1,18 @@
 "use client";
 
 import Image from "next/image";
+import type { StaticImageData } from "next/image";
 import { motion } from "framer-motion";
 import RoyalFrame from "@/components/RoyalFrame";
+import shaistaKhanImg from "@/public/images/shaista-khan-attack.jpg";
+import suratSackImg from "@/public/images/surat-sack.jpg";
+import purandarTreatyImg from "@/public/images/purandar-treaty.jpg";
+import agraEscapeImg from "@/public/images/agra-escape.jpg";
 
 interface BentoEvent {
   readonly title: string;
   readonly text: string;
-  readonly image: string;
+  readonly image: StaticImageData;
   readonly alt: string;
   /** Wide cells span 4 of 6 columns; square cells span 2. */
   readonly wide: boolean;
@@ -17,28 +22,28 @@ const BENTO_EVENTS: readonly BentoEvent[] = [
   {
     title: "Night Attack on Shaista Khan (1663)",
     text: "Shivaji led a daring night attack on the Mughal general Shaista Khan's camp at Lal Mahal in Pune. Khan lost three fingers in the scuffle and was forced to retreat, severely embarrassing the Mughal Empire.",
-    image: "/images/shaista-khan-attack.jpg",
+    image: shaistaKhanImg,
     alt: "Shivaji's night attack on Shaista Khan at Lal Mahal, Pune",
     wide: true,
   },
   {
     title: "Sack of Surat (1664)",
     text: "To replenish his depleted treasury, Shivaji sacked the wealthy Mughal trading center of Surat, decamping with immense wealth.",
-    image: "/images/surat-sack.jpg",
+    image: suratSackImg,
     alt: "The sack of Surat, the wealthy Mughal trading center",
     wide: false,
   },
   {
     title: "Treaty of Purandar (1665)",
     text: "Faced with the massive army of Rajput general Jai Singh I, Shivaji signed the Treaty of Purandar, strategically giving up 23 forts to buy time and peace.",
-    image: "/images/purandar-treaty.jpg",
+    image: purandarTreatyImg,
     alt: "The signing of the Treaty of Purandar with Jai Singh I",
     wide: false,
   },
   {
     title: "The Great Escape from Agra (1666)",
     text: "Placed under house arrest by Aurangzeb in Agra, Shivaji hatched a brilliant plan. He feigned illness and miraculously escaped with his son Sambhaji by hiding in large baskets of sweets meant for distribution.",
-    image: "/images/agra-escape.jpg",
+    image: agraEscapeImg,
     alt: "Shivaji's legendary escape from Agra in baskets of sweets",
     wide: true,
   },
@@ -55,27 +60,20 @@ function BentoCard({
     <motion.article
       initial={{ opacity: 0, scale: 0.92 }}
       whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.12 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.12 }}
       className={`group flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-black/40 backdrop-blur-md transition-[border-color,box-shadow] duration-300 ease-out hover:border-gold/40 hover:shadow-[0_0_20px_rgba(255,103,31,0.3)] ${
         event.wide ? "lg:col-span-4" : "lg:col-span-2"
       }`}
     >
-      {/* Framed artwork */}
+      {/* Framed artwork — full image, no cropping */}
       <RoyalFrame className="m-4 mb-0">
-        <div className="relative w-full aspect-video overflow-hidden rounded-xl">
-          <Image
-            src={event.image}
-            alt={event.alt}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover rounded-xl transition-transform duration-500 ease-out group-hover:scale-110"
-          />
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"
-          />
-        </div>
+        <Image
+          src={event.image}
+          alt={event.alt}
+          placeholder="blur"
+          className="w-full h-auto rounded-lg object-contain"
+        />
       </RoyalFrame>
 
       {/* Body */}
@@ -107,8 +105,8 @@ export default function MughalConflict() {
         <motion.header
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
           className="mx-auto mb-20 max-w-2xl text-center"
         >
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-gold">
