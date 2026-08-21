@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import type { StaticImageData } from "next/image";
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import RoyalFrame from "@/components/RoyalFrame";
