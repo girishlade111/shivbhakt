@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import RoyalFrame from "@/components/RoyalFrame";
 
 interface LegacyPillar {
   readonly title: string;
@@ -52,9 +56,11 @@ export default function LegacyFooter() {
         <div className="mx-auto max-w-7xl px-6">
           {/* Part 1 — Southern Campaigns & Final Years */}
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            <div
-              data-aos="fade-up"
-              data-aos-duration="1200"
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
               className="max-w-xl"
             >
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-gold">
@@ -73,40 +79,40 @@ export default function LegacyFooter() {
               <p className="mt-6 text-base leading-relaxed text-gray-300">
                 {SOUTHERN_CAMPAIGN_TEXT}
               </p>
-            </div>
+            </motion.div>
 
-            <div
-              data-aos="fade-up"
-              data-aos-delay="200"
-              data-aos-duration="1200"
-              className="group relative w-full"
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+              className="group w-full"
             >
-              {/* Offset gold frame */}
-              <div
-                aria-hidden
-                className="absolute -inset-3 rounded-2xl border border-gold/25 transition-all duration-500 group-hover:border-gold/60 group-hover:shadow-[0_0_50px_rgba(212,175,55,0.28)]"
-              />
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl ring-1 ring-gold/30">
-                <Image
-                  src="/images/raigad-statue.jpg"
-                  alt="Statue of Chhatrapati Shivaji Maharaj at Raigad Fort"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 46vw"
-                  className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-                <div
-                  aria-hidden
-                  className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
-                />
-              </div>
-            </div>
+              <RoyalFrame className="transition-shadow duration-500 group-hover:shadow-[0_0_40px_rgba(212,175,55,0.3)]">
+                <div className="relative w-full aspect-[4/3] overflow-hidden rounded-xl">
+                  <Image
+                    src="/images/raigad-statue.jpg"
+                    alt="Statue of Chhatrapati Shivaji Maharaj at Raigad Fort"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover rounded-xl transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
+                  />
+                </div>
+              </RoyalFrame>
+            </motion.div>
           </div>
 
           {/* Part 2 — Pillars of Legacy */}
           <div className="mt-24 sm:mt-28">
-            <header
-              data-aos="fade-in"
-              data-aos-duration="1200"
+            <motion.header
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.9, ease: "easeOut" }}
               className="mx-auto mb-14 max-w-xl text-center"
             >
               <h3 className="font-display text-2xl font-bold uppercase tracking-wide text-kesari drop-shadow-[0_0_22px_rgba(255,103,31,0.45)] sm:text-3xl">
@@ -116,15 +122,20 @@ export default function LegacyFooter() {
                 aria-hidden
                 className="mx-auto mt-4 block h-[3px] w-20 rounded-full bg-gradient-to-r from-transparent via-brightgold to-transparent"
               />
-            </header>
+            </motion.header>
 
             <ol className="grid grid-cols-1 gap-6 md:grid-cols-3">
               {LEGACY_PILLARS.map((pillar, index) => (
-                <li
+                <motion.li
                   key={pillar.title}
-                  data-aos="fade-up"
-                  data-aos-delay={(index * 150).toString()}
-                  data-aos-duration="1200"
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{
+                    duration: 0.8,
+                    ease: "easeOut",
+                    delay: index * 0.15,
+                  }}
                   className="flex min-h-[300px] flex-col rounded-3xl border border-gold/15 bg-white/[0.04] p-8 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-[0_0_40px_rgba(212,175,55,0.22)]"
                 >
                   <span
@@ -142,7 +153,7 @@ export default function LegacyFooter() {
                   <p className="mt-4 text-sm leading-relaxed text-gray-300">
                     {pillar.text}
                   </p>
-                </li>
+                </motion.li>
               ))}
             </ol>
           </div>
