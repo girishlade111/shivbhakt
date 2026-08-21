@@ -48,6 +48,8 @@ export default function HomePage() {
 
       <MughalConflict />
 
+      <CoronationAdmin />
+
       {/* Scroll-triggered timeline strip (AOS) */}
       <section
         aria-labelledby="timeline-heading"
