@@ -32,7 +32,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body
         className={`${manrope.variable} ${cinzel.variable} min-h-screen bg-night font-sans text-white antialiased`}
       >
-        <AOSInit />
         <Navbar />
         {children}
       </body>
