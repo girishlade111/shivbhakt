@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Cinzel, Manrope } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import AOSInit from "@/components/AOSInit";
 
 const manrope = Manrope({
   variable: "--font-manrope",
