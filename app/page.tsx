@@ -45,6 +45,8 @@ export default function HomePage() {
 
       <BijapurConflict />
 
+      <MughalConflict />
+
       {/* Scroll-triggered timeline strip (AOS) */}
       <section
         aria-labelledby="timeline-heading"
