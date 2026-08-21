@@ -1,0 +1,217 @@
+"use client";
+
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+
+interface ReignTab {
+  readonly label: string;
+  readonly title: string;
+  readonly text: string;
+  readonly image: string;
+  readonly alt: string;
+}
+
+const REIGN_TABS: readonly ReignTab[] = [
+  {
+    label: "The Coronation (1674)",
+    title: "Crowned as Chhatrapati",
+    text: "On 6 June 1674, Shivaji was formally crowned king of the Maratha Empire at Raigad Fort in a lavish ceremony. He assumed titles like Shakakarta (founder of an era), Haindava Dharmodhhaarak, and Chhatrapati. The royal seal (Rajmudra) was inscribed in Sanskrit.",
+    image: "/images/coronation-raigad.jpg",
+    alt: "The coronation of Shivaji as Chhatrapati at Raigad Fort in 1674",
+  },
+  {
+    label: "Ashta Pradhan Mandal",
+    title: "Council of Eight Ministers",
+    text: "Shivaji established the Ashta Pradhan Mandal, an administrative and advisory council of eight ministers, including the Peshwa (Prime Minister) and Amatya (Finance). He promoted Marathi and Sanskrit in his court, replacing Persian.",
+    image: "/images/ashta-pradhan.jpg",
+    alt: "The Ashta Pradhan Mandal — council of eight ministers",
+  },
+  {
+    label: "The Maratha Navy",
+    title: "Father of the Indian Navy",
+    text: "Aware of the need for naval power, Shivaji built a formidable coastal navy. He fortified the coastline by building marine forts, most notably the Sindhudurg Fort, which became the headquarters of the Maratha navy.",
+    image: "/images/sindhudurg-navy.jpg",
+    alt: "Sindhudurg Fort, headquarters of the Maratha navy",
+  },
+];
+
+export default function CoronationAdmin() {
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  /* Slide + fade the swapped content in on every tab change */
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        gsap.set("[data-tab-content]", { y: 0, autoAlpha: 1 });
+        return;
+      }
+
+      gsap.fromTo(
+        "[data-tab-content]",
+        { y: 28, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.55, ease: "power2.out", stagger: 0.08 }
+      );
+    }, panelRef);
+
+    return () => ctx.revert();
+  }, [activeIndex]);
+
+  const activeTab: ReignTab = REIGN_TABS[activeIndex]!;
+
+  const selectTab = (index: number): void => {
+    setActiveIndex(index);
+    tabRefs.current[index]?.focus();
+  };
+
+  const onKeyDown = (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+    index: number
+  ): void => {
+    const last = REIGN_TABS.length - 1;
+    let next: number | null = null;
+
+    if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+      next = index === last ? 0 : index + 1;
+    } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+      next = index === 0 ? last : index - 1;
+    } else if (event.key === "Home") {
+      next = 0;
+    } else if (event.key === "End") {
+      next = last;
+    }
+
+    if (next !== null) {
+      event.preventDefault();
+      selectTab(next);
+    }
+  };
+
+  return (
+    <section
+      id="coronation"
+      aria-labelledby="coronation-heading"
+      className="relative overflow-hidden bg-night py-24 sm:py-28"
+    >
+      {/* Ambient saffron glow */}
+      <div
+        aria-hidden
+        className="absolute right-[10%] top-40 h-[420px] w-[420px] rounded-full bg-kesari/10 blur-[150px]"
+      />
+
+      <div className="relative mx-auto max-w-7xl px-6">
+        {/* Section heading */}
+        <header data-aos="fade-up" className="mx-auto mb-20 max-w-3xl text-center">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-gold">
+            Chapter 04
+          </p>
+          <h2
+            id="coronation-heading"
+            className="font-display text-3xl font-bold uppercase tracking-wide sm:text-4xl lg:text-5xl"
+          >
+            <span className="text-kesari drop-shadow-[0_0_22px_rgba(255,103,31,0.45)]">
+              The Sovereign King:
+            </span>{" "}
+            <span className="bg-gradient-to-r from-gold via-brightgold to-gold bg-clip-text text-transparent">
+              Coronation &amp; Administration
+            </span>
+          </h2>
+          <span
+            aria-hidden
+            className="mx-auto mt-5 block h-[3px] w-28 rounded-full bg-gradient-to-r from-transparent via-brightgold to-transparent"
+          />
+        </header>
+
+        {/* Tabs layout */}
+        <div
+          data-aos="fade-up"
+          data-aos-delay="150"
+          className="grid gap-8 lg:grid-cols-[30fr_70fr] lg:gap-10"
+        >
+          {/* Left column — vertical tab list (30%) */}
+          <nav
+            role="tablist"
+            aria-label="Coronation and administration topics"
+            className="flex flex-col gap-4"
+          >
+            {REIGN_TABS.map((tab, index) => {
+              const isActive = index === activeIndex;
+
+              return (
+                <button
+                  key={tab.label}
+                  ref={(node) => {
+                    tabRefs.current[index] = node;
+                  }}
+                  type="button"
+                  role="tab"
+                  id={`reign-tab-${index}`}
+                  aria-selected={isActive}
+                  aria-controls="reign-panel"
+                  tabIndex={isActive ? 0 : -1}
+                  onClick={() => setActiveIndex(index)}
+                  onKeyDown={(event) => onKeyDown(event, index)}
+                  className={`flex w-full items-center gap-4 rounded-xl border px-5 py-4 text-left transition-all duration-300 ${
+                    isActive
+                      ? "scale-[1.03] border-brightgold bg-kesari text-white shadow-[0_0_28px_rgba(255,103,31,0.45)]"
+                      : "border-white/10 bg-white/5 text-white/80 backdrop-blur-sm hover:border-gold/40 hover:bg-white/10 hover:text-white hover:shadow-[0_0_18px_rgba(212,175,55,0.2)]"
+                  }`}
+                >
+                  <span
+                    className={`font-display text-lg font-bold ${
+                      isActive ? "text-brightgold" : "text-kesari"
+                    }`}
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="font-display text-base font-semibold leading-snug sm:text-lg">
+                    {tab.label}
+                  </span>
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Right column — content display area (70%) */}
+          <div
+            ref={panelRef}
+            id="reign-panel"
+            role="tabpanel"
+            aria-labelledby={`reign-tab-${activeIndex}`}
+            className="rounded-3xl border border-gold/30 bg-black/40 p-6 shadow-[0_0_45px_rgba(212,175,55,0.15)] backdrop-blur-md transition-shadow duration-500 hover:shadow-[0_0_60px_rgba(212,175,55,0.25)] sm:p-8"
+          >
+            <figure data-tab-content className="m-0">
+              <div className="group relative aspect-video overflow-hidden rounded-2xl ring-1 ring-gold/25 transition-shadow duration-500 group-hover:shadow-[0_0_35px_rgba(212,175,55,0.45)]">
+                <Image
+                  src={activeTab.image}
+                  alt={activeTab.alt}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 63vw"
+                  className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
+                />
+                <div
+                  aria-hidden
+                  className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
+                />
+              </div>
+
+              <figcaption className="mt-7 space-y-3 px-1">
+                <h3
+                  data-tab-content
+                  className="font-display text-2xl font-bold text-brightgold sm:text-3xl"
+                >
+                  {activeTab.title}
+                </h3>
+                <p data-tab-content className="text-sm leading-relaxed text-gray-300 sm:text-base">
+                  {activeTab.text}
+                </p>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
