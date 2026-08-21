@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import RoyalFrame from "@/components/RoyalFrame";
 
 interface ReignTab {
   readonly label: string;
@@ -38,26 +39,7 @@ const REIGN_TABS: readonly ReignTab[] = [
 
 export default function CoronationAdmin() {
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const panelRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
-
-  /* Slide + fade the swapped content in on every tab change */
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        gsap.set("[data-tab-content]", { y: 0, autoAlpha: 1 });
-        return;
-      }
-
-      gsap.fromTo(
-        "[data-tab-content]",
-        { y: 28, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.55, ease: "power2.out", stagger: 0.08 }
-      );
-    }, panelRef);
-
-    return () => ctx.revert();
-  }, [activeIndex]);
 
   const activeTab: ReignTab = REIGN_TABS[activeIndex]!;
 
@@ -103,7 +85,13 @@ export default function CoronationAdmin() {
 
       <div className="relative mx-auto max-w-7xl px-6">
         {/* Section heading */}
-        <header data-aos="fade-up" className="mx-auto mb-20 max-w-3xl text-center">
+        <motion.header
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mx-auto mb-20 max-w-3xl text-center"
+        >
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-gold">
             Chapter 04
           </p>
@@ -122,12 +110,14 @@ export default function CoronationAdmin() {
             aria-hidden
             className="mx-auto mt-5 block h-[3px] w-28 rounded-full bg-gradient-to-r from-transparent via-brightgold to-transparent"
           />
-        </header>
+        </motion.header>
 
         {/* Tabs layout */}
-        <div
-          data-aos="fade-up"
-          data-aos-delay="150"
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 }}
           className="grid gap-8 lg:grid-cols-[30fr_70fr] lg:gap-10"
         >
           {/* Left column — vertical tab list (30%) */}
@@ -176,41 +166,50 @@ export default function CoronationAdmin() {
 
           {/* Right column — content display area (70%) */}
           <div
-            ref={panelRef}
             id="reign-panel"
             role="tabpanel"
             aria-labelledby={`reign-tab-${activeIndex}`}
             className="rounded-3xl border border-gold/30 bg-black/40 p-6 shadow-[0_0_45px_rgba(212,175,55,0.15)] backdrop-blur-md transition-shadow duration-500 hover:shadow-[0_0_60px_rgba(212,175,55,0.25)] sm:p-8"
           >
-            <figure data-tab-content className="m-0">
-              <div className="group relative aspect-video overflow-hidden rounded-2xl ring-1 ring-gold/25 transition-shadow duration-500 group-hover:shadow-[0_0_35px_rgba(212,175,55,0.45)]">
-                <Image
-                  src={activeTab.image}
-                  alt={activeTab.alt}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 63vw"
-                  className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
-                />
-                <div
-                  aria-hidden
-                  className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
-                />
-              </div>
+            <AnimatePresence mode="wait">
+              <motion.figure
+                key={activeIndex}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="m-0"
+              >
+                <div className="group">
+                  <RoyalFrame className="transition-shadow duration-500 group-hover:shadow-[0_0_35px_rgba(212,175,55,0.35)]">
+                    <div className="relative w-full aspect-video overflow-hidden rounded-xl">
+                      <Image
+                        src={activeTab.image}
+                        alt={activeTab.alt}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 63vw"
+                        className="object-cover rounded-xl transition-transform duration-500 ease-out group-hover:scale-105"
+                      />
+                      <div
+                        aria-hidden
+                        className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
+                      />
+                    </div>
+                  </RoyalFrame>
+                </div>
 
-              <figcaption className="mt-7 space-y-3 px-1">
-                <h3
-                  data-tab-content
-                  className="font-display text-2xl font-bold text-brightgold sm:text-3xl"
-                >
-                  {activeTab.title}
-                </h3>
-                <p data-tab-content className="text-sm leading-relaxed text-gray-300 sm:text-base">
-                  {activeTab.text}
-                </p>
-              </figcaption>
-            </figure>
+                <figcaption className="mt-7 space-y-3 px-1">
+                  <h3 className="font-display text-2xl font-bold text-brightgold sm:text-3xl">
+                    {activeTab.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-gray-300 sm:text-base">
+                    {activeTab.text}
+                  </p>
+                </figcaption>
+              </motion.figure>
+            </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
