@@ -51,8 +51,7 @@ export default function HomePage() {
 
       <CoronationAdmin />
 
-      {/* Scroll-triggered timeline strip (AOS) */}
-      <section
+      {/* Scroll-triggered timeline strip (AOS) */}<section
         aria-labelledby="timeline-heading"
         className="relative border-y border-gold/10 bg-night py-24"
       >
