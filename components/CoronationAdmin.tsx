@@ -184,20 +184,13 @@ export default function CoronationAdmin() {
                 className="m-0"
               >
                 <div className="group">
-                  <RoyalFrame className="transition-shadow duration-500 group-hover:shadow-[0_0_35px_rgba(212,175,55,0.35)]">
-                    <div className="relative w-full aspect-video overflow-hidden rounded-xl">
-                      <Image
-                        src={activeTab.image}
-                        alt={activeTab.alt}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 63vw"
-                        className="object-cover rounded-xl transition-transform duration-500 ease-out group-hover:scale-105"
-                      />
-                      <div
-                        aria-hidden
-                        className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
-                      />
-                    </div>
+                  <RoyalFrame className="transition-shadow duration-500 group-hover:border-brightgold/70 group-hover:shadow-[0_0_35px_rgba(255,215,0,0.25)]">
+                    <Image
+                      src={activeTab.image}
+                      alt={activeTab.alt}
+                      placeholder="blur"
+                      className="w-full h-auto rounded-lg object-contain"
+                    />
                   </RoyalFrame>
                 </div>
 

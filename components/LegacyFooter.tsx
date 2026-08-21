@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import RoyalFrame from "@/components/RoyalFrame";
+import raigadStatueImg from "@/public/images/raigad-statue.jpg";
 
 interface LegacyPillar {
   readonly title: string;
@@ -88,20 +89,13 @@ export default function LegacyFooter() {
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
               className="group w-full"
             >
-              <RoyalFrame className="transition-shadow duration-500 group-hover:shadow-[0_0_40px_rgba(212,175,55,0.3)]">
-                <div className="relative w-full aspect-[4/3] overflow-hidden rounded-xl">
-                  <Image
-                    src="/images/raigad-statue.jpg"
-                    alt="Statue of Chhatrapati Shivaji Maharaj at Raigad Fort"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover rounded-xl transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
-                  <div
-                    aria-hidden
-                    className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
-                  />
-                </div>
+              <RoyalFrame className="transition-shadow duration-500 group-hover:border-brightgold/70 group-hover:shadow-[0_0_40px_rgba(255,215,0,0.3)]">
+                <Image
+                  src={raigadStatueImg}
+                  alt="Statue of Chhatrapati Shivaji Maharaj at Raigad Fort"
+                  placeholder="blur"
+                  className="w-full h-auto rounded-lg object-contain"
+                />
               </RoyalFrame>
             </motion.div>
           </div>
