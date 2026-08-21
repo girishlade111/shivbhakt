@@ -4,12 +4,15 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import RoyalFrame from "@/components/RoyalFrame";
+import coronationRaigadImg from "@/public/images/coronation-raigad.jpg";
+import ashtaPradhanImg from "@/public/images/ashta-pradhan.jpg";
+import sindhudurgNavyImg from "@/public/images/sindhudurg-navy.jpg";
 
 interface ReignTab {
   readonly label: string;
   readonly title: string;
   readonly text: string;
-  readonly image: string;
+  readonly image: StaticImageData;
   readonly alt: string;
 }
 
