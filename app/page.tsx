@@ -1,4 +1,5 @@
 import Hero from "@/components/Hero";
+import EarlyLife from "@/components/EarlyLife";
 
 interface TimelineFact {
   readonly period: string;
