@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shivbhakt — A Tribute to Chhatrapati Shivaji Maharaj
 
-## Getting Started
+An immersive, editorial-style tribute website dedicated to Chhatrapati Shivaji Maharaj (1630–1680),
+founder of the Maratha Empire. Explore his early life, the conflicts with Bijapur and the Mughals,
+his coronation at Raigad Fort in 1674, and his enduring legacy — through animated, page-transitioned
+storytelling sections.
 
-First, run the development server:
+## Features
+
+- **Multi-chapter storytelling** — dedicated pages for Early Life, Bijapur Conflict, Mughal Conflict,
+  Coronation, and Legacy
+- **Animated hero** with cinematic typography (Cinzel + Manrope fonts)
+- **Page transitions** powered by Framer Motion for a smooth, app-like feel
+- **Royal editorial design** — dark theme, gold accents, framed visual motifs
+- **Fully responsive** layout with a mobile-friendly navbar
+- Static export — zero backend, deployable to any static host
+
+## Tech Stack
+
+- [Next.js 16](https://nextjs.org) (App Router, static export)
+- [React 19](https://react.dev)
+- [Tailwind CSS v4](https://tailwindcss.com)
+- [Framer Motion](https://motion.dev) for animations
+- TypeScript
+
+## Quick Start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build & Deploy
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The site is configured for static export (`output: "export"` in `next.config.ts`):
 
-## Learn More
+```bash
+npm run build   # emits a static site into ./out
+```
 
-To learn more about Next.js, take a look at the following resources:
+Deploy `./out` to any static host — GitHub Pages, Cloudflare Pages, Netlify, or Vercel.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+  page.tsx              # Homepage (Hero)
+  early-life/page.tsx   # Early life chapter
+  bijapur-conflict/     # Bijapur Sultanate conflicts
+  mughal-conflict/      # Mughal conflicts
+  coronation/page.tsx   # Raigad coronation, 1674
+  legacy/page.tsx       # Enduring legacy
+  layout.tsx            # Root layout, fonts, global metadata
+components/
+  Hero.tsx, Navbar.tsx, PageTransition.tsx, RoyalFrame.tsx,
+  EarlyLife.tsx, BijapurConflict.tsx, MughalConflict.tsx,
+  CoronationAdmin.tsx, LegacyFooter.tsx
+public/images/          # Site imagery
+```
 
-## Deploy on Vercel
+## Environment Variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+None required — fully static site.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+Built by [Girish Lade](https://ladestack.in) — part of the
+[LadeStack](https://ladestack.in) collection of free tools and websites.
